@@ -1,27 +1,19 @@
-# 缓缓 · AS 日历云端版
+# 缓缓 · AS 日历
 
-项目：https://qodcjmktfqvycgrtvqau.supabase.co
+公网网页：https://8280209zt.github.io/as-calendar/
 
-公网地址：https://8280209zt.github.io/as-calendar/
+## 使用方式
 
-- GitHub Pages 托管静态网页，Supabase Auth 提供邮箱链接登录。
-- 所有记录写入 Supabase `public.as_entries`，每个用户每天一条记录。
-- GitHub 仅保存代码和 SQL；不提交健康记录、数据库密码或 service_role 密钥。
-- 保留月历、年历、评分、感受、删除、CSV/JSON 导出及示例展示。
+使用管理员交付的完整专属链接打开，无需邮箱登录。访问凭证位于 URL 的 `#key=...` 中，请勿公开分享或提交到仓库。相同链接在不同设备访问同一份记录。浏览器会记住凭证；清理浏览器数据后，请重新使用完整链接。
 
-## 重新部署步骤
+## 数据
 
-1. 在 Supabase 项目 SQL Editor 运行 `schema.sql`。
-2. 在 `config.js` 填入项目 URL 和 publishable/anon key。
-3. 推送这些文件到 GitHub 仓库，在 Pages 中选择 main 分支根目录。
-4. 在 Supabase Auth URL Configuration 将 Site URL 和 Redirect URLs 设为实际 Pages 地址（包含仓库路径和末尾斜线）。
-5. 配置允许使用的登录邮箱和邮件发送方式，验证邮箱链接登录、保存、刷新读取和跨用户隔离。
+记录保存在 Supabase `public.as_entries`：user_id、date、score、note、updated_at。页面保留 CSV / JSON 导出。旧的本地文件数据不自动上传。
 
-数据库字段：`user_id`、`date`、`score`、`note`、`updated_at`。
-所有 CRUD 由 RLS 限制为当前用户自己的行。更新由数据库写入时间戳。
+## 部署
 
-原本机 HTML 的 localStorage 数据不自动上传。现有本机数据请先从原网页导出备份。
+GitHub Pages 使用 main 分支根目录；config.js 仅含可公开的 Supabase 项目地址和 publishable key。
 
-## 当前部署
+在新 Supabase 项目先执行 schema.sql，再执行 private-link.sql。私有凭证表 calendar_private.access_links 仅保存 SHA-256 哈希，禁止匿名直接读写。RPC 验证凭证后仅操作绑定用户的记录。凭证配置不提交到此仓库。
 
-已在 GitHub Pages 发布，数据库表及 RLS 已创建。当前使用 Supabase 默认邮件服务，仅向项目组织成员邮箱发送登录邮件；对外开放注册需配置自定义 SMTP。
+网页移除了第三方 JavaScript 依赖；访问凭证只在 HTTPS POST 请求中交给 Supabase，不进入查询参数或 GitHub 仓库。
