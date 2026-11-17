@@ -41,8 +41,7 @@ async function initCloud() {
     // Keep the key in the fragment so copying the address works across devices.
     if (!new URLSearchParams(location.hash.slice(1)).has('key')) history.replaceState(null, '', location.pathname + '#key=' + accessKey);
   }
-  document.querySelector('#auth-status').textContent = accessKey
-    ? '专属链接 · 无需登录。保存后自动同步到你的记录表；请勿分享完整链接。'
-    : '无需登录，请使用你的完整专属链接打开。';
+  document.querySelector('#account').hidden = !!accessKey;
+  document.querySelector('#auth-status').textContent = accessKey ? '' : '请使用你的完整专属链接打开。';
   await load();
 }
